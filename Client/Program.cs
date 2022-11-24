@@ -13,7 +13,7 @@ namespace MyNetworking
             EventBasedNetListener listener = new EventBasedNetListener();
             NetManager client = new NetManager(listener);
             client.Start(9051);
-            client.Connect("localhost", 9050, "SomeConnectionKey");
+            client.Connect("20.13.17.73", 9050, "SomeConnectionKey");
 
             listener.ConnectionRequestEvent += request =>
             {

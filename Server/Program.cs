@@ -13,7 +13,7 @@ namespace MyNetworkingServer
             Console.WriteLine("Starting ...");
             EventBasedNetListener listener = new EventBasedNetListener();
             NetManager server = new NetManager(listener);
-            server.Start(9050);
+            server.Start(8888);
 
             listener.ConnectionRequestEvent += request =>
             {
