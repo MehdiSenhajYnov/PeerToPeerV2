@@ -38,12 +38,12 @@ namespace MyNetworkingServer
                 peer.Send(writer, DeliveryMethod.ReliableOrdered);          // Send with reliability
                 if (clients.Count > 1)
                 {
-                    NetDataWriter writer2 = new NetDataWriter();                 // Create writer class
-                    writer2.Put("ConnectTo:" + clients[1].EndPoint.Address.ToString() + ":" + clients[1].EndPoint.Port.ToString() + ":" + clients[0].EndPoint.Port.ToString());                                // Put some string
-                    clients[0].Send(writer2, DeliveryMethod.ReliableOrdered);          // Send with reliability
-                    writer2.Reset();
-                    writer2.Put("ConnectTo:" + clients[0].EndPoint.Address.ToString() + ":" + clients[0].EndPoint.Port.ToString() + ":" + clients[1].EndPoint.Port.ToString());                                // Put some string
-                    clients[1].Send(writer2, DeliveryMethod.ReliableOrdered);          // Send
+                    writer.Reset();
+                    writer.Put("ConnectTo:" + clients[1].EndPoint.ToString() + ":" + clients[0].EndPoint.Port.ToString());                                // Put some string
+                    clients[0].Send(writer, DeliveryMethod.ReliableOrdered);          // Send with reliability
+                    writer.Reset();
+                    writer.Put("ConnectTo:" + clients[0].EndPoint.ToString() + ":" + clients[1].EndPoint.Port.ToString());                                // Put some string
+                    clients[1].Send(writer, DeliveryMethod.ReliableOrdered);          // Send
                 }
             };
 

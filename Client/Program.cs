@@ -36,8 +36,9 @@ namespace MyNetworking
             listener.NetworkReceiveEvent += (fromPeer, dataReader, deliveryMethod) =>
             {
                 Console.WriteLine("We got: {0}", dataReader.GetString(100));
-                if (dataReader.GetString().StartsWith("ConnectTo:")) {
-                    string[] split = dataReader.GetString().Split(":");
+                string message = dataReader.GetString();
+                if (message.StartsWith("ConnectTo:")) {
+                    string[] split = message.Split(":");
                     if (split.Length > 1) {
                         string ip = split[1];
                         int port = int.Parse(split[2]);
