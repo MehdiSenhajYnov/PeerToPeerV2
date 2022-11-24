@@ -19,7 +19,7 @@ namespace MyNetworkingServer
             {
                 if(server.ConnectedPeersCount < 10)
                 {
-                    request.AcceptIfKey("SomeConnectionKey");
+                    request.Accept();
                 }   
                 else
                 {

@@ -12,8 +12,8 @@ namespace MyNetworking
             Console.WriteLine("Starting ...");
             EventBasedNetListener listener = new EventBasedNetListener();
             NetManager client = new NetManager(listener);
-            client.Start(9051);
-            client.Connect("20.13.17.73", 8888, "SomeConnectionKey");
+            client.Start();
+            client.Connect("20.13.17.73", 8888, "");
 
             listener.ConnectionRequestEvent += request =>
             {
@@ -47,15 +47,21 @@ namespace MyNetworking
                 }
             }).Start();
             
+            if (ServerPeer == null) 
+            {
+                Console.WriteLine("Waiting for server...");
+            }
+            while (ServerPeer == null)
+            {
+                Thread.Sleep(500);
+            }
+
+            Console.WriteLine("Connected to server!");
+
             string? input = Console.ReadLine();
             while (input != "quit")
             {
-                if (ServerPeer == null) 
-                {
-                    Console.WriteLine("Waiting for server...");
-                    Thread.Sleep(500);
-                    continue;
-                }
+                
                 NetDataWriter writer = new NetDataWriter();                 // Create writer class
                 writer.Put(input);                                // Put some string
                 ServerPeer.Send(writer, DeliveryMethod.ReliableOrdered);             // Send with reliability
