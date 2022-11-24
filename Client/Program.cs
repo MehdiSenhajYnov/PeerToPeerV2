@@ -9,11 +9,13 @@ namespace MyNetworking
         public static void Main(string[] args)
         {
             NetPeer? ServerPeer = null;
+            NetPeer? ClientPeer = null;
+
             Console.WriteLine("Starting ...");
             EventBasedNetListener listener = new EventBasedNetListener();
             NetManager client = new NetManager(listener);
             client.Start();
-            client.Connect("20.13.17.73", 8888, "");
+            ServerPeer = client.Connect("20.13.17.73", 8888, "");
 
             listener.ConnectionRequestEvent += request =>
             {
@@ -33,8 +35,35 @@ namespace MyNetworking
 
             listener.NetworkReceiveEvent += (fromPeer, dataReader, deliveryMethod) =>
             {
-                if (ServerPeer == null) { ServerPeer = fromPeer ;}
                 Console.WriteLine("We got: {0}", dataReader.GetString(100));
+                if (dataReader.GetString().StartsWith("ConnectTo:")) {
+                    string[] split = dataReader.GetString().Split(":");
+                    if (split.Length > 1) {
+                        string ip = split[1];
+                        int port = int.Parse(split[2]);
+                        int MyPort = int.Parse(split[3]);
+                        client.DisconnectAll();
+                        client.Stop();
+                        client.Start(MyPort);
+
+                        Console.WriteLine("Connecting to: " + ip);
+                        ClientPeer = client.Connect(ip, port, "");
+
+                        if (ClientPeer == null) 
+                        {
+                            Console.WriteLine("Waiting for Peer...");
+                        }
+                        while (ClientPeer == null)
+                        {
+                            Thread.Sleep(500);
+                            NetDataWriter writer = new NetDataWriter();                 // Create writer class
+                            writer.Put("hole punch");                                // Put some string
+                            ClientPeer.Send(writer, DeliveryMethod.Unreliable);             // Send with reliability
+                        }
+
+                        Console.WriteLine("Connected to other peer!");
+                    }
+                }
                 dataReader.Recycle();
             };
             new Thread(() =>
@@ -69,7 +98,8 @@ namespace MyNetworking
                 input = Console.ReadLine();
             }
 
-            client.Stop();
+
+
         }
     }
 }
