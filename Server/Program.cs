@@ -38,11 +38,18 @@ namespace MyNetworkingServer
                 peer.Send(writer, DeliveryMethod.ReliableOrdered);          // Send with reliability
                 if (clients.Count > 1)
                 {
+                    string TOSend = String.Empty;
+
+
                     writer.Reset();
-                    writer.Put("ConnectTo:" + clients[1].EndPoint.ToString() + ":" + clients[0].EndPoint.Port.ToString());                                // Put some string
+                    TOSend = "ConnectTo:" + clients[1].EndPoint.ToString() + ":" + clients[0].EndPoint.Port.ToString();
+                    writer.Put(TOSend);                                // Put some string
                     clients[0].Send(writer, DeliveryMethod.ReliableOrdered);          // Send with reliability
+
+                    
                     writer.Reset();
-                    writer.Put("ConnectTo:" + clients[0].EndPoint.ToString() + ":" + clients[1].EndPoint.Port.ToString());                                // Put some string
+                    TOSend = "ConnectTo:" + clients[0].EndPoint.ToString() + ":" + clients[1].EndPoint.Port.ToString();
+                    writer.Put(TOSend);                                // Put some string
                     clients[1].Send(writer, DeliveryMethod.ReliableOrdered);          // Send
                 }
             };

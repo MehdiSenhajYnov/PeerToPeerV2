@@ -35,9 +35,11 @@ namespace MyNetworking
 
             listener.NetworkReceiveEvent += (fromPeer, dataReader, deliveryMethod) =>
             {
-                Console.WriteLine("We got: {0}", dataReader.GetString(100));
+                Console.WriteLine("We got: {0}", dataReader.GetString());
+                
                 string message = dataReader.GetString();
-                if (message.StartsWith("ConnectTo:")) {
+                Console.WriteLine("Message: {0}", message);
+                /*if (message.StartsWith("ConnectTo:")) {
                     string[] split = message.Split(":");
                     if (split.Length > 1) {
                         string ip = split[1];
@@ -65,7 +67,7 @@ namespace MyNetworking
                         Console.WriteLine("Connected to other peer!");
                     }
                 }
-                dataReader.Recycle();
+                dataReader.Recycle();*/
             };
             new Thread(() =>
             {
