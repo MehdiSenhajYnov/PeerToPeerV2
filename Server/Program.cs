@@ -10,7 +10,7 @@ namespace MyNetworkingServer
         public static void Main(string[] args)
         {
             List<NetPeer> clients = new List<NetPeer>();
-            Console.WriteLine("Starting ...");
+            Console.WriteLine("Starting Server On Port 8888 ...");
             EventBasedNetListener listener = new EventBasedNetListener();
             NetManager server = new NetManager(listener);
             server.Start(8888);
